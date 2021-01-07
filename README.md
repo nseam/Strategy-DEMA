@@ -1,3 +1,3 @@
-# Strategy MA
+# Strategy DEMA
 
-Strategy based on the Moving Average indicator
+Strategy based on the Double Exponential Moving Average (DEMA) indicator.

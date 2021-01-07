@@ -4,29 +4,29 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_MA_Params_{{ Timeframe }} : Indi_MA_Params {
-  Indi_MA_Params_{{ Timeframe }}() : Indi_MA_Params(indi_ma_defaults, PERIOD_{{ Timeframe }}) {
-    applied_price = (ENUM_APPLIED_PRICE){{ MA_Indi_MA_Applied_Price | default(0) }};
-    ma_method = {{ MA_Indi_MA_Method | default(0) }};
-    period = {{ MA_Indi_MA_Period | default(0) }};
-    shift = {{ MA_Shift | default(0) }};
+struct Indi_DEMA_Params_{{ Timeframe }} : Indi_DEMA_Params {
+  Indi_DEMA_Params_{{ Timeframe }}() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_{{ Timeframe }}) {
+    applied_price = (ENUM_APPLIED_PRICE){{ DEMA_Indi_DEMA_Applied_Price | default(0) }};
+    ma_method = {{ DEMA_Indi_DEMA_Method | default(0) }};
+    period = {{ DEMA_Indi_DEMA_Period | default(0) }};
+    shift = {{ DEMA_Shift | default(0) }};
   }
-} indi_ma_{{ Timeframe | lower }};
+} indi_dema_{{ Timeframe | lower }};
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_MA_Params_{{ Timeframe }} : StgParams {
+struct Stg_DEMA_Params_{{ Timeframe }} : StgParams {
   // Struct constructor.
-  Stg_MA_Params_{{ Timeframe }}() : StgParams(stg_ma_defaults) {
-    lot_size = {{ MA_LotSize | default(0) }};
-    signal_open_method = {{ MA_SignalOpenMethod | default(0) }};
-    signal_open_filter = {{ MA_SignalOpenFilterMethod | default(1) }};
-    signal_open_level = (float){{ MA_SignalOpenLevel | default(0) }};
-    signal_open_boost = {{ MA_SignalOpenBoostMethod | default(0) }};
-    signal_close_method = {{ MA_SignalCloseMethod | default(0) }};
-    signal_close_level = (float){{ MA_SignalCloseLevel | default(0) }};
-    price_stop_method = {{ MA_PriceStopMethod | default(0) }};
-    price_stop_level = {{ MA_SignalCloseLevel | default(1) }};
-    tick_filter_method = {{ MA_TickFilterMethod  | default(1) }};
-    max_spread = {{ MA_MaxSpread | default(0) }};
+  Stg_DEMA_Params_{{ Timeframe }}() : StgParams(stg_dema_defaults) {
+    lot_size = {{ DEMA_LotSize | default(0) }};
+    signal_open_method = {{ DEMA_SignalOpenMethod | default(0) }};
+    signal_open_filter = {{ DEMA_SignalOpenFilterMethod | default(1) }};
+    signal_open_level = (float){{ DEMA_SignalOpenLevel | default(0) }};
+    signal_open_boost = {{ DEMA_SignalOpenBoostMethod | default(0) }};
+    signal_close_method = {{ DEMA_SignalCloseMethod | default(0) }};
+    signal_close_level = (float){{ DEMA_SignalCloseLevel | default(0) }};
+    price_stop_method = {{ DEMA_PriceStopMethod | default(0) }};
+    price_stop_level = {{ DEMA_SignalCloseLevel | default(1) }};
+    tick_filter_method = {{ DEMA_TickFilterMethod  | default(1) }};
+    max_spread = {{ DEMA_MaxSpread | default(0) }};
   }
-} stg_ma_{{ Timeframe | lower }};
+} stg_dema_{{ Timeframe | lower }};

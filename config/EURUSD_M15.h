@@ -4,14 +4,14 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_MA_Params_M15 : Indi_MA_Params {
-  Indi_MA_Params_M15() : Indi_MA_Params(indi_ma_defaults, PERIOD_M15) { shift = 0; }
-} indi_ma_m15;
+struct Indi_DEMA_Params_M15 : Indi_DEMA_Params {
+  Indi_DEMA_Params_M15() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_M15) { shift = 0; }
+} indi_dema_m15;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_MA_Params_M15 : StgParams {
+struct Stg_DEMA_Params_M15 : StgParams {
   // Struct constructor.
-  Stg_MA_Params_M15() : StgParams(stg_ma_defaults) {
+  Stg_DEMA_Params_M15() : StgParams(stg_dema_defaults) {
     lot_size = 0;
     signal_open_method = 0;
     signal_open_filter = 1;
@@ -24,4 +24,4 @@ struct Stg_MA_Params_M15 : StgParams {
     tick_filter_method = 1;
     max_spread = 0;
   }
-} stg_ma_m15;
+} stg_dema_m15;

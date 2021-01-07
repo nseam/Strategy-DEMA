@@ -1,27 +1,27 @@
 /**
  * @file
- * Implements MA strategy.
+ * Implements DEMA strategy.
  */
 
 // Includes EA31337 framework.
 #include <EA31337-classes/EA.mqh>
-#include <EA31337-classes/Indicators/Indi_MA.mqh>
+#include <EA31337-classes/Indicators/Indi_DEMA.mqh>
 #include <EA31337-classes/Strategy.mqh>
 
 // Inputs.
-input string __MA_Parameters__ = "-- MA strategy params --";  // >>> MA <<<
+input string __DEMA_Parameters__ = "-- DEMA strategy params --";  // >>> DEMA <<<
 input int Active_Tfs = 15;                // Activated timeframes (1-255) [M1=1,M5=2,M15=4,M30=8,H1=16,H4=32,H8=64...]
 input ENUM_LOG_LEVEL Log_Level = V_INFO;  // Log level.
 input bool Info_On_Chart = true;          // Display info on chart.
 
 // Includes strategy.
-#include "Stg_MA.mqh"
+#include "Stg_DEMA.mqh"
 
 // Defines.
-#define ea_name "Stg_MA"
+#define ea_name "Stg_DEMA"
 #define ea_version "1.000"
 #define ea_desc "Strategy based on EA31337 framework."
-#define ea_link "https://github.com/EA31337/Strategy-MA"
+#define ea_link "https://github.com/EA31337/Strategy-DEMA"
 #define ea_author "kenorb"
 
 // Properties.
@@ -48,7 +48,7 @@ int OnInit() {
   EAParams ea_params(__FILE__, Log_Level);
   ea_params.SetChartInfoFreq(Info_On_Chart ? 2 : 0);
   ea = new EA(ea_params);
-  _result &= ea.StrategyAdd<Stg_MA>(Active_Tfs);
+  _result &= ea.StrategyAdd<Stg_DEMA>(Active_Tfs);
   return (_result ? INIT_SUCCEEDED : INIT_FAILED);
 }
 

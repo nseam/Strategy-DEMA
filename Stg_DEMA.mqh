@@ -1,58 +1,61 @@
 /**
  * @file
- * Implements MA strategy based the Moving Average indicator.
+ * Implements DEMA strategy based the Double Exponential Moving Average indicator.
  */
 
 // User params.
-INPUT float MA_LotSize = 0;               // Lot size
-INPUT int MA_SignalOpenMethod = 0;        // Signal open method (-127-127)
-INPUT float MA_SignalOpenLevel = 0.0f;    // Signal open level
-INPUT int MA_SignalOpenFilterMethod = 1;  // Signal open filter method
-INPUT int MA_SignalOpenBoostMethod = 0;   // Signal open boost method
-INPUT int MA_SignalCloseMethod = 48;      // Signal close method (-127-127)
-INPUT float MA_SignalCloseLevel = 0.0f;   // Signal close level
-INPUT int MA_PriceStopMethod = 0;         // Price stop method
-INPUT float MA_PriceStopLevel = 0;        // Price stop level
-INPUT int MA_TickFilterMethod = 1;        // Tick filter method
-INPUT float MA_MaxSpread = 4.0;           // Max spread to trade (pips)
-INPUT int MA_Shift = 0;                   // Shift
-INPUT int MA_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
-INPUT string __MA_Indi_MA_Parameters__ = "-- MA strategy: MA indicator params --";  // >>> MA strategy: MA indicator <<<
-INPUT int MA_Indi_MA_Period = 12;                                                   // Period
-INPUT int MA_Indi_MA_Shift = 0;                                                     // MA Shift
-INPUT ENUM_MA_METHOD MA_Indi_MA_Method = 1;                                         // MA Method
-INPUT ENUM_APPLIED_PRICE MA_Indi_MA_Applied_Price = 6;                              // Applied Price
+INPUT float DEMA_LotSize = 0;               // Lot size
+INPUT int DEMA_SignalOpenMethod = 0;        // Signal open method (-127-127)
+INPUT float DEMA_SignalOpenLevel = 0.0f;    // Signal open level
+INPUT int DEMA_SignalOpenFilterMethod = 1;  // Signal open filter method
+INPUT int DEMA_SignalOpenBoostMethod = 0;   // Signal open boost method
+INPUT int DEMA_SignalCloseMethod = 48;      // Signal close method (-127-127)
+INPUT float DEMA_SignalCloseLevel = 0.0f;   // Signal close level
+INPUT int DEMA_PriceStopMethod = 0;         // Price stop method
+INPUT float DEMA_PriceStopLevel = 0;        // Price stop level
+INPUT int DEMA_TickFilterMethod = 1;        // Tick filter method
+INPUT float DEMA_MaxSpread = 4.0;           // Max spread to trade (pips)
+INPUT int DEMA_Shift = 0;                   // Shift
+INPUT int DEMA_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
+INPUT string __DEMA_Indi_DEMA_Parameters__ =
+    "-- DEMA strategy: DEMA indicator params --";           // >>> DEMA strategy: DEMA indicator <<<
+INPUT int DEMA_Indi_DEMA_Period = 12;                       // Period
+INPUT int DEMA_Indi_DEMA_Shift = 0;                         // DEMA Shift
+INPUT ENUM_DEMA_METHOD DEMA_Indi_DEMA_Method = 1;           // DEMA Method
+INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = 6;  // Applied Price
 
 // Structs.
 
 // Defines struct with default user indicator values.
-struct Indi_MA_Params_Defaults : MAParams {
-  Indi_MA_Params_Defaults()
-      : MAParams(::MA_Indi_MA_Period, ::MA_Indi_MA_Shift, ::MA_Indi_MA_Method, ::MA_Indi_MA_Applied_Price) {}
-} indi_ma_defaults;
+struct Indi_DEMA_Params_Defaults : DEMAParams {
+  Indi_DEMA_Params_Defaults()
+      : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_Shift, ::DEMA_Indi_DEMA_Method,
+                   ::DEMA_Indi_DEMA_Applied_Price) {}
+} indi_dema_defaults;
 
 // Defines struct to store indicator parameter values.
-struct Indi_MA_Params : public MAParams {
+struct Indi_DEMA_Params : public DEMAParams {
   // Struct constructors.
-  void Indi_MA_Params(MAParams &_params, ENUM_TIMEFRAMES _tf) : MAParams(_params, _tf) {}
+  void Indi_DEMA_Params(DEMAParams &_params, ENUM_TIMEFRAMES _tf) : DEMAParams(_params, _tf) {}
 };
 
 // Defines struct with default user strategy values.
-struct Stg_MA_Params_Defaults : StgParams {
-  Stg_MA_Params_Defaults()
-      : StgParams(::MA_SignalOpenMethod, ::MA_SignalOpenFilterMethod, ::MA_SignalOpenLevel, ::MA_SignalOpenBoostMethod,
-                  ::MA_SignalCloseMethod, ::MA_SignalCloseLevel, ::MA_PriceStopMethod, ::MA_PriceStopLevel,
-                  ::MA_TickFilterMethod, ::MA_MaxSpread, ::MA_Shift, ::MA_OrderCloseTime) {}
-} stg_ma_defaults;
+struct Stg_DEMA_Params_Defaults : StgParams {
+  Stg_DEMA_Params_Defaults()
+      : StgParams(::DEMA_SignalOpenMethod, ::DEMA_SignalOpenFilterMethod, ::DEMA_SignalOpenLevel,
+                  ::DEMA_SignalOpenBoostMethod, ::DEMA_SignalCloseMethod, ::DEMA_SignalCloseLevel,
+                  ::DEMA_PriceStopMethod, ::DEMA_PriceStopLevel, ::DEMA_TickFilterMethod, ::DEMA_MaxSpread,
+                  ::DEMA_Shift, ::DEMA_OrderCloseTime) {}
+} stg_dema_defaults;
 
 // Struct to define strategy parameters to override.
-struct Stg_MA_Params : StgParams {
-  Indi_MA_Params iparams;
+struct Stg_DEMA_Params : StgParams {
+  Indi_DEMA_Params iparams;
   StgParams sparams;
 
   // Struct constructors.
-  Stg_MA_Params(Indi_MA_Params &_iparams, StgParams &_sparams)
-      : iparams(indi_ma_defaults, _iparams.tf), sparams(stg_ma_defaults) {
+  Stg_DEMA_Params(Indi_DEMA_Params &_iparams, StgParams &_sparams)
+      : iparams(indi_dema_defaults, _iparams.tf), sparams(stg_dema_defaults) {
     iparams = _iparams;
     sparams = _sparams;
   }
@@ -67,29 +70,29 @@ struct Stg_MA_Params : StgParams {
 #include "config/EURUSD_M30.h"
 #include "config/EURUSD_M5.h"
 
-class Stg_MA : public Strategy {
+class Stg_DEMA : public Strategy {
  public:
-  Stg_MA(StgParams &_params, string _name) : Strategy(_params, _name) {}
+  Stg_DEMA(StgParams &_params, string _name) : Strategy(_params, _name) {}
 
-  static Stg_MA *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
+  static Stg_DEMA *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_MA_Params _indi_params(indi_ma_defaults, _tf);
-    StgParams _stg_params(stg_ma_defaults);
+    Indi_DEMA_Params _indi_params(indi_dema_defaults, _tf);
+    StgParams _stg_params(stg_dema_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_MA_Params>(_indi_params, _tf, indi_ma_m1, indi_ma_m5, indi_ma_m15, indi_ma_m30, indi_ma_h1,
-                                    indi_ma_h4, indi_ma_h8);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_ma_m1, stg_ma_m5, stg_ma_m15, stg_ma_m30, stg_ma_h1, stg_ma_h4,
-                               stg_ma_h8);
+      SetParamsByTf<Indi_DEMA_Params>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30,
+                                      indi_dema_h1, indi_dema_h4, indi_dema_h8);
+      SetParamsByTf<StgParams>(_stg_params, _tf, stg_dema_m1, stg_dema_m5, stg_dema_m15, stg_dema_m30, stg_dema_h1,
+                               stg_dema_h4, stg_dema_h8);
     }
     // Initialize indicator.
-    MAParams ma_params(_indi_params);
-    _stg_params.SetIndicator(new Indi_MA(_indi_params));
+    DEMAParams ma_params(_indi_params);
+    _stg_params.SetIndicator(new Indi_DEMA(_indi_params));
     // Initialize strategy parameters.
     _stg_params.GetLog().SetLevel(_log_level);
     _stg_params.SetMagicNo(_magic_no);
     _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
-    Strategy *_strat = new Stg_MA(_stg_params, "MA");
+    Strategy *_strat = new Stg_DEMA(_stg_params, "DEMA");
     _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
@@ -98,7 +101,7 @@ class Stg_MA : public Strategy {
    * Check strategy's opening signal.
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
-    Indi_MA *_indi = Data();
+    Indi_DEMA *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
     bool _result = _is_valid;
     double _level_pips = _level * Chart().GetPipSize();
@@ -137,7 +140,7 @@ class Stg_MA : public Strategy {
    * Gets price stop value for profit take or stop loss.
    */
   float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
-    Indi_MA *_indi = Data();
+    Indi_DEMA *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     int _direction = Order::OrderDirection(_cmd, _mode);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
