@@ -5,7 +5,12 @@
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
 struct Indi_DEMA_Params_H1 : Indi_DEMA_Params {
-  Indi_DEMA_Params_H1() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_H1) { shift = 0; }
+  Indi_DEMA_Params_H1() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_H1) {
+    period = 12;
+    ma_shift = 0;
+    applied_price = (ENUM_APPLIED_PRICE)0;
+    shift = 0;
+  }
 } indi_dema_h1;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.

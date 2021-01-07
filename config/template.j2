@@ -7,7 +7,7 @@
 struct Indi_DEMA_Params_{{ Timeframe }} : Indi_DEMA_Params {
   Indi_DEMA_Params_{{ Timeframe }}() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ DEMA_Indi_DEMA_Applied_Price | default(0) }};
-    ma_method = {{ DEMA_Indi_DEMA_Method | default(0) }};
+    ma_shift = {{ DEMA_MA_Shift | default(0) }};
     period = {{ DEMA_Indi_DEMA_Period | default(0) }};
     shift = {{ DEMA_Shift | default(0) }};
   }
