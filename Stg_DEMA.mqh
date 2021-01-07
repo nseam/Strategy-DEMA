@@ -20,17 +20,17 @@ INPUT int DEMA_OrderCloseTime = -20;        // Order close time in mins (>0) or 
 INPUT string __DEMA_Indi_DEMA_Parameters__ =
     "-- DEMA strategy: DEMA indicator params --";           // >>> DEMA strategy: DEMA indicator <<<
 INPUT int DEMA_Indi_DEMA_Period = 12;                       // Period
-INPUT int DEMA_Indi_DEMA_Shift = 0;                         // DEMA Shift
-INPUT ENUM_DEMA_METHOD DEMA_Indi_DEMA_Method = 1;           // DEMA Method
+INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                      // MA Shift
 INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = 6;  // Applied Price
+INPUT int DEMA_Indi_DEMA_Shift = 0;                         // DEMA Shift
 
 // Structs.
 
 // Defines struct with default user indicator values.
 struct Indi_DEMA_Params_Defaults : DEMAParams {
   Indi_DEMA_Params_Defaults()
-      : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_Shift, ::DEMA_Indi_DEMA_Method,
-                   ::DEMA_Indi_DEMA_Applied_Price) {}
+      : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_MA_Shift,
+                   ::DEMA_Indi_DEMA_Applied_Price, ::DEMA_Indi_DEMA_Shift) {}
 } indi_dema_defaults;
 
 // Defines struct to store indicator parameter values.
@@ -108,27 +108,19 @@ class Stg_DEMA : public Strategy {
     if (_is_valid) {
       switch (_cmd) {
         case ORDER_TYPE_BUY:
-          _result = _indi[CURR][0] > _indi[PREV][0];
+          _result &= _indi.IsIncreasing(2);
+          _result &= _indi.IsIncByPct(_level, 0, 0, 2);
           if (_method != 0) {
-            if (METHOD(_method, 0)) _result &= _indi[PREV][0] < _indi[PPREV][0];  // ... 2 consecutive columns are red.
-            if (METHOD(_method, 1)) _result &= _indi[PPREV][0] < _indi[3][0];     // ... 3 consecutive columns are red.
-            if (METHOD(_method, 2)) _result &= _indi[3][0] < _indi[4][0];         // ... 4 consecutive columns are red.
-            if (METHOD(_method, 3))
-              _result &= _indi[PREV][0] > _indi[PPREV][0];                     // ... 2 consecutive columns are green.
-            if (METHOD(_method, 4)) _result &= _indi[PPREV][0] > _indi[3][0];  // ... 3 consecutive columns are green.
-            if (METHOD(_method, 5)) _result &= _indi[3][0] < _indi[4][0];      // ... 4 consecutive columns are green.
+            if (METHOD(_method, 0)) _result &= _indi.IsIncreasing(3);  // ... 3 consecutive columns are green.
+            if (METHOD(_method, 1)) _result &= _indi.IsIncreasing(2, 0, 3);
           }
           break;
         case ORDER_TYPE_SELL:
-          _result = _indi[CURR][0] < _indi[PREV][0];
+          _result &= _indi.IsDecreasing(2);
+          _result &= _indi.IsDecByPct(_level, 0, 0, 2);
           if (_method != 0) {
-            if (METHOD(_method, 0)) _result &= _indi[PREV][0] < _indi[PPREV][0];  // ... 2 consecutive columns are red.
-            if (METHOD(_method, 1)) _result &= _indi[PPREV][0] < _indi[3][0];     // ... 3 consecutive columns are red.
-            if (METHOD(_method, 2)) _result &= _indi[3][0] < _indi[4][0];         // ... 4 consecutive columns are red.
-            if (METHOD(_method, 3))
-              _result &= _indi[PREV][0] > _indi[PPREV][0];                     // ... 2 consecutive columns are green.
-            if (METHOD(_method, 4)) _result &= _indi[PPREV][0] > _indi[3][0];  // ... 3 consecutive columns are green.
-            if (METHOD(_method, 5)) _result &= _indi[3][0] < _indi[4][0];      // ... 4 consecutive columns are green.
+            if (METHOD(_method, 0)) _result &= _indi.IsDecreasing(3);  // ... 3 consecutive columns are red.
+            if (METHOD(_method, 1)) _result &= _indi.IsIncreasing(2, 0, 3);
           }
           break;
       }
