@@ -9,5 +9,5 @@ DEMA_Indi_DEMA_Shift={{ shift | default(0) }}
 DEMA_LotSize={{ lot_size | default(0) }}
 DEMA_PriceStopMethod=0
 DEMA_SignalOpenFilterMethod=1
-DEMA_SignalOpenLevel={{ signal_open_level | replace("(float)", "") | float | default(0) }}
+DEMA_SignalOpenLevel={{ (signal_open_level | default(0) | replace("(float)", "") | float) }}
 DEMA_TickFilterMethod=1
