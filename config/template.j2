@@ -4,8 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_DEMA_Params_{{ Timeframe }} : Indi_DEMA_Params {
-  Indi_DEMA_Params_{{ Timeframe }}() : Indi_DEMA_Params(indi_dema_defaults, PERIOD_{{ Timeframe }}) {
+struct Indi_DEMA_Params_{{ Timeframe }} : DEMAParams {
+  Indi_DEMA_Params_{{ Timeframe }}() : DEMAParams(indi_dema_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ DEMA_Indi_DEMA_Applied_Price | default(0) }};
     ma_shift = {{ DEMA_MA_Shift | default(0) }};
     period = {{ DEMA_Indi_DEMA_Period | default(0) }};
@@ -25,7 +25,7 @@ struct Stg_DEMA_Params_{{ Timeframe }} : StgParams {
     signal_close_method = {{ DEMA_SignalCloseMethod | default(0) }};
     signal_close_level = (float){{ DEMA_SignalCloseLevel | default(0) }};
     price_stop_method = {{ DEMA_PriceStopMethod | default(0) }};
-    price_stop_level = {{ DEMA_SignalCloseLevel | default(1) }};
+    price_stop_level = (float){{ DEMA_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ DEMA_TickFilterMethod  | default(1) }};
     max_spread = {{ DEMA_MaxSpread | default(0) }};
   }

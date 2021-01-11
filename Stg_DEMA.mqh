@@ -5,12 +5,12 @@
 
 // User params.
 INPUT float DEMA_LotSize = 0;               // Lot size
-INPUT int DEMA_SignalOpenMethod = 0;        // Signal open method (-127-127)
-INPUT float DEMA_SignalOpenLevel = 10;      // Signal open level
+INPUT int DEMA_SignalOpenMethod = 0;        // Signal open method (-3-3)
+INPUT float DEMA_SignalOpenLevel = 0;       // Signal open level
 INPUT int DEMA_SignalOpenFilterMethod = 1;  // Signal open filter method
 INPUT int DEMA_SignalOpenBoostMethod = 0;   // Signal open boost method
-INPUT int DEMA_SignalCloseMethod = 0;       // Signal close method (-127-127)
-INPUT float DEMA_SignalCloseLevel = 10;     // Signal close level
+INPUT int DEMA_SignalCloseMethod = 0;       // Signal close method (-3-3)
+INPUT float DEMA_SignalCloseLevel = 0;      // Signal close level
 INPUT int DEMA_PriceStopMethod = 0;         // Price stop method
 INPUT float DEMA_PriceStopLevel = 0;        // Price stop level
 INPUT int DEMA_TickFilterMethod = 1;        // Tick filter method
@@ -33,12 +33,6 @@ struct Indi_DEMA_Params_Defaults : DEMAParams {
                    ::DEMA_Indi_DEMA_Shift) {}
 } indi_dema_defaults;
 
-// Defines struct to store indicator parameter values.
-struct Indi_DEMA_Params : public DEMAParams {
-  // Struct constructors.
-  void Indi_DEMA_Params(DEMAParams &_params, ENUM_TIMEFRAMES _tf) : DEMAParams(_params, _tf) {}
-};
-
 // Defines struct with default user strategy values.
 struct Stg_DEMA_Params_Defaults : StgParams {
   Stg_DEMA_Params_Defaults()
@@ -50,11 +44,11 @@ struct Stg_DEMA_Params_Defaults : StgParams {
 
 // Struct to define strategy parameters to override.
 struct Stg_DEMA_Params : StgParams {
-  Indi_DEMA_Params iparams;
+  DEMAParams iparams;
   StgParams sparams;
 
   // Struct constructors.
-  Stg_DEMA_Params(Indi_DEMA_Params &_iparams, StgParams &_sparams)
+  Stg_DEMA_Params(DEMAParams &_iparams, StgParams &_sparams)
       : iparams(indi_dema_defaults, _iparams.tf), sparams(stg_dema_defaults) {
     iparams = _iparams;
     sparams = _sparams;
@@ -76,11 +70,11 @@ class Stg_DEMA : public Strategy {
 
   static Stg_DEMA *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_DEMA_Params _indi_params(indi_dema_defaults, _tf);
+    DEMAParams _indi_params(indi_dema_defaults, _tf);
     StgParams _stg_params(stg_dema_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_DEMA_Params>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30,
-                                      indi_dema_h1, indi_dema_h4, indi_dema_h8);
+      SetParamsByTf<DEMAParams>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30,
+                                indi_dema_h1, indi_dema_h4, indi_dema_h8);
       SetParamsByTf<StgParams>(_stg_params, _tf, stg_dema_m1, stg_dema_m5, stg_dema_m15, stg_dema_m30, stg_dema_h1,
                                stg_dema_h4, stg_dema_h8);
     }
