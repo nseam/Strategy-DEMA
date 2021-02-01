@@ -72,12 +72,12 @@ class Stg_DEMA : public Strategy {
     // Initialize strategy initial values.
     DEMAParams _indi_params(indi_dema_defaults, _tf);
     StgParams _stg_params(stg_dema_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<DEMAParams>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30,
-                                indi_dema_h1, indi_dema_h4, indi_dema_h8);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_dema_m1, stg_dema_m5, stg_dema_m15, stg_dema_m30, stg_dema_h1,
-                               stg_dema_h4, stg_dema_h8);
-    }
+#ifdef __config__
+    SetParamsByTf<DEMAParams>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30, indi_dema_h1,
+                              indi_dema_h4, indi_dema_h8);
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_dema_m1, stg_dema_m5, stg_dema_m15, stg_dema_m30, stg_dema_h1,
+                             stg_dema_h4, stg_dema_h8);
+#endif
     // Initialize indicator.
     DEMAParams ma_params(_indi_params);
     _stg_params.SetIndicator(new Indi_DEMA(_indi_params));
