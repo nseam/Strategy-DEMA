@@ -15,7 +15,7 @@ INPUT int DEMA_PriceStopMethod = 0;         // Price stop method
 INPUT float DEMA_PriceStopLevel = 0;        // Price stop level
 INPUT int DEMA_TickFilterMethod = 1;        // Tick filter method
 INPUT float DEMA_MaxSpread = 4.0;           // Max spread to trade (pips)
-INPUT int DEMA_Shift = 0;                   // Shift
+INPUT short DEMA_Shift = 0;                 // Shift
 INPUT int DEMA_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __DEMA_Indi_DEMA_Parameters__ =
     "-- DEMA strategy: DEMA indicator params --";                               // >>> DEMA strategy: DEMA indicator <<<
