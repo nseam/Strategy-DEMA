@@ -66,7 +66,7 @@ struct Stg_DEMA_Params : StgParams {
 
 class Stg_DEMA : public Strategy {
  public:
-  Stg_DEMA(StgParams &_params, string _name) : Strategy(_params, _name) {}
+  Stg_DEMA(StgParams &_params, Trade *_trade = NULL, string _name = "") : Strategy(_params, _trade, _name) {}
 
   static Stg_DEMA *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
@@ -81,12 +81,9 @@ class Stg_DEMA : public Strategy {
     // Initialize indicator.
     DEMAParams ma_params(_indi_params);
     _stg_params.SetIndicator(new Indi_DEMA(_indi_params));
-    // Initialize strategy parameters.
-    _stg_params.GetLog().SetLevel(_log_level);
-    _stg_params.SetMagicNo(_magic_no);
-    _stg_params.SetTf(_tf, _Symbol);
-    // Initialize strategy instance.
-    Strategy *_strat = new Stg_DEMA(_stg_params, "DEMA");
+    // Initialize Strategy instance.
+    TradeParams _tparams(_magic_no, _log_level);
+    Strategy *_strat = new Stg_DEMA(_stg_params, new Trade(new Chart(_tf, _Symbol)), "DEMA");
     _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
