@@ -49,7 +49,7 @@ struct Stg_DEMA_Params : StgParams {
 
   // Struct constructors.
   Stg_DEMA_Params(DEMAParams &_iparams, StgParams &_sparams)
-      : iparams(indi_dema_defaults, _iparams.tf), sparams(stg_dema_defaults) {
+      : iparams(indi_dema_defaults, _iparams.tf.GetTf()), sparams(stg_dema_defaults) {
     iparams = _iparams;
     sparams = _sparams;
   }
