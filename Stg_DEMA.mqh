@@ -99,22 +99,17 @@ class Stg_DEMA : public Strategy {
     bool _result = _is_valid;
     double _level_pips = _level * Chart().GetPipSize();
     if (_is_valid) {
+      IndicatorSignal _signals = _indi.GetSignals(4, _shift);
       switch (_cmd) {
         case ORDER_TYPE_BUY:
           _result &= _indi.IsIncreasing(2);
           _result &= _indi.IsIncByPct(_level, 0, 0, 2);
-          if (_method != 0) {
-            if (METHOD(_method, 0)) _result &= _indi.IsIncreasing(3);  // ... 3 consecutive columns are green.
-            if (METHOD(_method, 1)) _result &= _indi.IsIncreasing(2, 0, 3);
-          }
+          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
           break;
         case ORDER_TYPE_SELL:
           _result &= _indi.IsDecreasing(2);
           _result &= _indi.IsDecByPct(_level, 0, 0, 2);
-          if (_method != 0) {
-            if (METHOD(_method, 0)) _result &= _indi.IsDecreasing(3);  // ... 3 consecutive columns are red.
-            if (METHOD(_method, 1)) _result &= _indi.IsIncreasing(2, 0, 3);
-          }
+          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
           break;
       }
     }
