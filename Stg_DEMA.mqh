@@ -11,6 +11,7 @@ INPUT float DEMA_SignalOpenLevel = 0;        // Signal open level
 INPUT int DEMA_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int DEMA_SignalOpenBoostMethod = 0;    // Signal open boost method
 INPUT int DEMA_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT int DEMA_SignalCloseFilter = 0;        // Signal close filter (-127-127)
 INPUT float DEMA_SignalCloseLevel = 0;       // Signal close level
 INPUT int DEMA_PriceStopMethod = 1;          // Price stop method
 INPUT float DEMA_PriceStopLevel = 0;         // Price stop level
@@ -37,9 +38,9 @@ struct Indi_DEMA_Params_Defaults : DEMAParams {
 struct Stg_DEMA_Params_Defaults : StgParams {
   Stg_DEMA_Params_Defaults()
       : StgParams(::DEMA_SignalOpenMethod, ::DEMA_SignalOpenFilterMethod, ::DEMA_SignalOpenLevel,
-                  ::DEMA_SignalOpenBoostMethod, ::DEMA_SignalCloseMethod, ::DEMA_SignalCloseLevel,
-                  ::DEMA_PriceStopMethod, ::DEMA_PriceStopLevel, ::DEMA_TickFilterMethod, ::DEMA_MaxSpread,
-                  ::DEMA_Shift, ::DEMA_OrderCloseTime) {}
+                  ::DEMA_SignalOpenBoostMethod, ::DEMA_SignalCloseMethod, ::DEMA_SignalCloseFilter,
+                  ::DEMA_SignalCloseLevel, ::DEMA_PriceStopMethod, ::DEMA_PriceStopLevel, ::DEMA_TickFilterMethod,
+                  ::DEMA_MaxSpread, ::DEMA_Shift, ::DEMA_OrderCloseTime) {}
 } stg_dema_defaults;
 
 // Struct to define strategy parameters to override.
