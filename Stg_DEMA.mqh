@@ -4,19 +4,19 @@
  */
 
 // User params.
-INPUT float DEMA_LotSize = 0;               // Lot size
-INPUT int DEMA_SignalOpenMethod = 2;        // Signal open method (-127-127)
-INPUT float DEMA_SignalOpenLevel = 0;       // Signal open level
+INPUT float DEMA_LotSize = 0;                // Lot size
+INPUT int DEMA_SignalOpenMethod = 2;         // Signal open method (-127-127)
+INPUT float DEMA_SignalOpenLevel = 0;        // Signal open level
 INPUT int DEMA_SignalOpenFilterMethod = 32;  // Signal open filter method
-INPUT int DEMA_SignalOpenBoostMethod = 0;   // Signal open boost method
-INPUT int DEMA_SignalCloseMethod = 2;       // Signal close method (-127-127)
-INPUT float DEMA_SignalCloseLevel = 0;      // Signal close level
-INPUT int DEMA_PriceStopMethod = 1;         // Price stop method
-INPUT float DEMA_PriceStopLevel = 0;        // Price stop level
-INPUT int DEMA_TickFilterMethod = 1;        // Tick filter method
-INPUT float DEMA_MaxSpread = 4.0;           // Max spread to trade (pips)
-INPUT short DEMA_Shift = 0;                 // Shift
-INPUT int DEMA_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
+INPUT int DEMA_SignalOpenBoostMethod = 0;    // Signal open boost method
+INPUT int DEMA_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT float DEMA_SignalCloseLevel = 0;       // Signal close level
+INPUT int DEMA_PriceStopMethod = 1;          // Price stop method
+INPUT float DEMA_PriceStopLevel = 0;         // Price stop level
+INPUT int DEMA_TickFilterMethod = 1;         // Tick filter method
+INPUT float DEMA_MaxSpread = 4.0;            // Max spread to trade (pips)
+INPUT short DEMA_Shift = 0;                  // Shift
+INPUT int DEMA_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
 INPUT string __DEMA_Indi_DEMA_Parameters__ =
     "-- DEMA strategy: DEMA indicator params --";                               // >>> DEMA strategy: DEMA indicator <<<
 INPUT int DEMA_Indi_DEMA_Period = 12;                                           // Period
@@ -95,23 +95,24 @@ class Stg_DEMA : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Indi_DEMA *_indi = GetIndicator();
-    bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
-    bool _result = _is_valid;
+    bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID);
     double _level_pips = _level * Chart().GetPipSize();
-    if (_is_valid) {
-      IndicatorSignal _signals = _indi.GetSignals(4, _shift);
-      switch (_cmd) {
-        case ORDER_TYPE_BUY:
-          _result &= _indi.IsIncreasing(2);
-          _result &= _indi.IsIncByPct(_level, 0, 0, 2);
-          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
-          break;
-        case ORDER_TYPE_SELL:
-          _result &= _indi.IsDecreasing(2);
-          _result &= _indi.IsDecByPct(_level, 0, 0, 2);
-          _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
-          break;
-      }
+    if (!_result) {
+      // Returns false when indicator data is not valid.
+      return false;
+    }
+    IndicatorSignal _signals = _indi.GetSignals(4, _shift);
+    switch (_cmd) {
+      case ORDER_TYPE_BUY:
+        _result &= _indi.IsIncreasing(2);
+        _result &= _indi.IsIncByPct(_level, 0, 0, 2);
+        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        break;
+      case ORDER_TYPE_SELL:
+        _result &= _indi.IsDecreasing(2);
+        _result &= _indi.IsDecByPct(_level, 0, 0, 2);
+        _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
+        break;
     }
     return _result;
   }
