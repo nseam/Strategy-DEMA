@@ -4,6 +4,7 @@
  */
 
 // User params.
+INPUT_GROUP("DEMA strategy: strategy params");
 INPUT float DEMA_LotSize = 0;                // Lot size
 INPUT int DEMA_SignalOpenMethod = 2;         // Signal open method (-127-127)
 INPUT float DEMA_SignalOpenLevel = 0;        // Signal open level
@@ -17,8 +18,7 @@ INPUT int DEMA_TickFilterMethod = 1;         // Tick filter method
 INPUT float DEMA_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short DEMA_Shift = 0;                  // Shift
 INPUT int DEMA_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
-INPUT string __DEMA_Indi_DEMA_Parameters__ =
-    "-- DEMA strategy: DEMA indicator params --";                               // >>> DEMA strategy: DEMA indicator <<<
+INPUT_GROUP("DEMA strategy: DEMA indicator params");
 INPUT int DEMA_Indi_DEMA_Period = 12;                                           // Period
 INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                                          // MA Shift
 INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = (ENUM_APPLIED_PRICE)0;  // Applied Price
