@@ -18,6 +18,8 @@ INPUT float DEMA_PriceStopLevel = 0;         // Price stop level
 INPUT int DEMA_TickFilterMethod = 1;         // Tick filter method
 INPUT float DEMA_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short DEMA_Shift = 0;                  // Shift
+INPUT float DEMA_OrderCloseLoss = 0;         // Order close loss
+INPUT float DEMA_OrderCloseProfit = 0;       // Order close profit
 INPUT int DEMA_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("DEMA strategy: DEMA indicator params");
 INPUT int DEMA_Indi_DEMA_Period = 12;                                           // Period
@@ -40,7 +42,11 @@ struct Stg_DEMA_Params_Defaults : StgParams {
       : StgParams(::DEMA_SignalOpenMethod, ::DEMA_SignalOpenFilterMethod, ::DEMA_SignalOpenLevel,
                   ::DEMA_SignalOpenBoostMethod, ::DEMA_SignalCloseMethod, ::DEMA_SignalCloseFilter,
                   ::DEMA_SignalCloseLevel, ::DEMA_PriceStopMethod, ::DEMA_PriceStopLevel, ::DEMA_TickFilterMethod,
-                  ::DEMA_MaxSpread, ::DEMA_Shift, ::DEMA_OrderCloseTime) {}
+                  ::DEMA_MaxSpread, ::DEMA_Shift) {
+    Set(STRAT_PARAM_OCL, DEMA_OrderCloseLoss);
+    Set(STRAT_PARAM_OCP, DEMA_OrderCloseProfit);
+    Set(STRAT_PARAM_OCT, DEMA_OrderCloseTime);
+  }
 } stg_dema_defaults;
 
 // Struct to define strategy parameters to override.
