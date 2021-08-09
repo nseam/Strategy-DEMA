@@ -9,6 +9,7 @@ INPUT float DEMA_LotSize = 0;                // Lot size
 INPUT int DEMA_SignalOpenMethod = 2;         // Signal open method (-127-127)
 INPUT float DEMA_SignalOpenLevel = 0;        // Signal open level
 INPUT int DEMA_SignalOpenFilterMethod = 32;  // Signal open filter method
+INPUT int DEMA_SignalOpenFilterTime = 6;     // Signal open filter time
 INPUT int DEMA_SignalOpenBoostMethod = 0;    // Signal open boost method
 INPUT int DEMA_SignalCloseMethod = 2;        // Signal close method (-127-127)
 INPUT int DEMA_SignalCloseFilter = 0;        // Signal close filter (-127-127)
@@ -46,6 +47,7 @@ struct Stg_DEMA_Params_Defaults : StgParams {
     Set(STRAT_PARAM_OCL, DEMA_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, DEMA_OrderCloseProfit);
     Set(STRAT_PARAM_OCT, DEMA_OrderCloseTime);
+    Set(STRAT_PARAM_SOFT, DEMA_SignalOpenFilterTime);
   }
 } stg_dema_defaults;
 
