@@ -19,7 +19,7 @@ struct Stg_DEMA_Params_{{ Timeframe }} : StgParams {
   Stg_DEMA_Params_{{ Timeframe }}() : StgParams(stg_dema_defaults) {
     lot_size = {{ DEMA_LotSize | default(0) }};
     signal_open_method = {{ DEMA_SignalOpenMethod | default(0) }};
-    signal_open_filter = {{ DEMA_SignalOpenFilterMethod | default(1) }};
+    signal_open_filter_method = {{ DEMA_SignalOpenFilterMethod | default(1) }};
     signal_open_level = (float){{ DEMA_SignalOpenLevel | default(0) }};
     signal_open_boost = {{ DEMA_SignalOpenBoostMethod | default(0) }};
     signal_close_method = {{ DEMA_SignalCloseMethod | default(0) }};
