@@ -6,15 +6,15 @@
 // User params.
 INPUT_GROUP("DEMA strategy: strategy params");
 INPUT float DEMA_LotSize = 0;                // Lot size
-INPUT int DEMA_SignalOpenMethod = 2;         // Signal open method (-127-127)
-INPUT float DEMA_SignalOpenLevel = 0;        // Signal open level
+INPUT int DEMA_SignalOpenMethod = 0;         // Signal open method (-127-127)
+INPUT float DEMA_SignalOpenLevel = 0.07f;    // Signal open level
 INPUT int DEMA_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int DEMA_SignalOpenFilterTime = 6;     // Signal open filter time
 INPUT int DEMA_SignalOpenBoostMethod = 0;    // Signal open boost method
-INPUT int DEMA_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT int DEMA_SignalCloseMethod = 0;        // Signal close method (-127-127)
 INPUT int DEMA_SignalCloseFilter = 0;        // Signal close filter (-127-127)
-INPUT float DEMA_SignalCloseLevel = 0;       // Signal close level
-INPUT int DEMA_PriceStopMethod = 1;          // Price stop method
+INPUT float DEMA_SignalCloseLevel = 0.07f;   // Signal close level
+INPUT int DEMA_PriceStopMethod = 1;          // Price stop method (0-127)
 INPUT float DEMA_PriceStopLevel = 0;         // Price stop level
 INPUT int DEMA_TickFilterMethod = 1;         // Tick filter method
 INPUT float DEMA_MaxSpread = 4.0;            // Max spread to trade (pips)
@@ -23,10 +23,10 @@ INPUT float DEMA_OrderCloseLoss = 0;         // Order close loss
 INPUT float DEMA_OrderCloseProfit = 0;       // Order close profit
 INPUT int DEMA_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("DEMA strategy: DEMA indicator params");
-INPUT int DEMA_Indi_DEMA_Period = 12;                                           // Period
-INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                                          // MA Shift
-INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = (ENUM_APPLIED_PRICE)0;  // Applied Price
-INPUT int DEMA_Indi_DEMA_Shift = 0;                                             // DEMA Shift
+INPUT int DEMA_Indi_DEMA_Period = 17;                                // Period
+INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                               // MA Shift
+INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = PRICE_OPEN;  // Applied Price
+INPUT int DEMA_Indi_DEMA_Shift = 0;                                  // DEMA Shift
 
 // Structs.
 
@@ -119,7 +119,7 @@ class Stg_DEMA : public Strategy {
         break;
       case ORDER_TYPE_SELL:
         _result &= _indi.IsDecreasing(2);
-        _result &= _indi.IsDecByPct(_level, 0, 0, 2);
+        _result &= _indi.IsDecByPct(-_level, 0, 0, 2);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
     }
