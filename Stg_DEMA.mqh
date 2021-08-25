@@ -21,7 +21,7 @@ INPUT float DEMA_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short DEMA_Shift = 0;                  // Shift
 INPUT float DEMA_OrderCloseLoss = 0;         // Order close loss
 INPUT float DEMA_OrderCloseProfit = 0;       // Order close profit
-INPUT int DEMA_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
+INPUT int DEMA_OrderCloseTime = -30;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("DEMA strategy: DEMA indicator params");
 INPUT int DEMA_Indi_DEMA_Period = 17;                                // Period
 INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                               // MA Shift
