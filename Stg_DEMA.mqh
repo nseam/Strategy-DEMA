@@ -44,6 +44,7 @@ struct Stg_DEMA_Params_Defaults : StgParams {
                   ::DEMA_SignalOpenBoostMethod, ::DEMA_SignalCloseMethod, ::DEMA_SignalCloseFilter,
                   ::DEMA_SignalCloseLevel, ::DEMA_PriceStopMethod, ::DEMA_PriceStopLevel, ::DEMA_TickFilterMethod,
                   ::DEMA_MaxSpread, ::DEMA_Shift) {
+    Set(STRAT_PARAM_LS, DEMA_LotSize);
     Set(STRAT_PARAM_OCL, DEMA_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, DEMA_OrderCloseProfit);
     Set(STRAT_PARAM_OCT, DEMA_OrderCloseTime);
