@@ -23,10 +23,11 @@ INPUT float DEMA_OrderCloseLoss = 0;         // Order close loss
 INPUT float DEMA_OrderCloseProfit = 0;       // Order close profit
 INPUT int DEMA_OrderCloseTime = -30;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("DEMA strategy: DEMA indicator params");
-INPUT int DEMA_Indi_DEMA_Period = 17;                                // Period
-INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                               // MA Shift
-INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = PRICE_OPEN;  // Applied Price
-INPUT int DEMA_Indi_DEMA_Shift = 0;                                  // DEMA Shift
+INPUT int DEMA_Indi_DEMA_Period = 17;                                    // Period
+INPUT int DEMA_Indi_DEMA_MA_Shift = 0;                                   // MA Shift
+INPUT ENUM_APPLIED_PRICE DEMA_Indi_DEMA_Applied_Price = PRICE_OPEN;      // Applied Price
+INPUT int DEMA_Indi_DEMA_Shift = 0;                                      // DEMA Shift
+INPUT ENUM_IDATA_SOURCE_TYPE DEMA_Indi_DEMA_SourceType = IDATA_BUILTIN;  // Source type
 
 // Structs.
 
@@ -34,7 +35,7 @@ INPUT int DEMA_Indi_DEMA_Shift = 0;                                  // DEMA Shi
 struct Indi_DEMA_Params_Defaults : DEMAParams {
   Indi_DEMA_Params_Defaults()
       : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_MA_Shift, ::DEMA_Indi_DEMA_Applied_Price,
-                   ::DEMA_Indi_DEMA_Shift) {}
+                   ::DEMA_Indi_DEMA_Shift, ::DEMA_Indi_DEMA_SourceType) {}
 } indi_dema_defaults;
 
 // Defines struct with default user strategy values.
@@ -92,7 +93,6 @@ class Stg_DEMA : public Strategy {
                              stg_dema_h4, stg_dema_h8);
 #endif
     // Initialize indicator.
-    DEMAParams ma_params(_indi_params);
     _stg_params.SetIndicator(new Indi_DEMA(_indi_params));
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
@@ -107,7 +107,8 @@ class Stg_DEMA : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Indi_DEMA *_indi = GetIndicator();
-    bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift);
+    bool _result =
+        _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift) && _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift + 3);
     double _level_pips = _level * Chart().GetPipSize();
     if (!_result) {
       // Returns false when indicator data is not valid.
@@ -116,13 +117,13 @@ class Stg_DEMA : public Strategy {
     IndicatorSignal _signals = _indi.GetSignals(4, _shift);
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result &= _indi.IsIncreasing(2);
-        _result &= _indi.IsIncByPct(_level, 0, 0, 2);
+        _result &= _indi.IsIncreasing(1, 0, _shift);
+        _result &= _indi.IsIncByPct(_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
       case ORDER_TYPE_SELL:
-        _result &= _indi.IsDecreasing(2);
-        _result &= _indi.IsDecByPct(-_level, 0, 0, 2);
+        _result &= _indi.IsDecreasing(1, 0, _shift);
+        _result &= _indi.IsDecByPct(-_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
     }
