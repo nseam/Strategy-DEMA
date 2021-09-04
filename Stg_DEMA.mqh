@@ -39,7 +39,7 @@ INPUT ENUM_IDATA_SOURCE_TYPE DEMA_Indi_DEMA_SourceType = IDATA_BUILTIN;  // Sour
 struct Indi_DEMA_Params_Defaults : DEMAParams {
   Indi_DEMA_Params_Defaults()
       : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_MA_Shift, ::DEMA_Indi_DEMA_Applied_Price,
-                   ::DEMA_Indi_DEMA_Shift, ::DEMA_Indi_DEMA_SourceType) {}
+                   ::DEMA_Indi_DEMA_Shift, PERIOD_CURRENT, ::DEMA_Indi_DEMA_SourceType) {}
 } indi_dema_defaults;
 
 // Defines struct with default user strategy values.
