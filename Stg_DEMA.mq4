@@ -11,3 +11,8 @@
 
 // Includes the main code.
 #include "Stg_DEMA.mq5"
+
+#ifdef __resource__
+#property tester_indicator "::Indicators\\DEMA.ex4"
+#property tester_library "::Indicators\\DEMA.ex4"
+#endif
