@@ -40,7 +40,7 @@ struct Indi_DEMA_Params_Defaults : DEMAParams {
   Indi_DEMA_Params_Defaults()
       : DEMAParams(::DEMA_Indi_DEMA_Period, ::DEMA_Indi_DEMA_MA_Shift, ::DEMA_Indi_DEMA_Applied_Price,
                    ::DEMA_Indi_DEMA_Shift, PERIOD_CURRENT, ::DEMA_Indi_DEMA_SourceType) {}
-} indi_dema_defaults;
+};
 
 // Defines struct with default user strategy values.
 struct Stg_DEMA_Params_Defaults : StgParams {
@@ -55,7 +55,7 @@ struct Stg_DEMA_Params_Defaults : StgParams {
     Set(STRAT_PARAM_OCT, DEMA_OrderCloseTime);
     Set(STRAT_PARAM_SOFT, DEMA_SignalOpenFilterTime);
   }
-} stg_dema_defaults;
+};
 
 // Struct to define strategy parameters to override.
 struct Stg_DEMA_Params : StgParams {
@@ -63,9 +63,7 @@ struct Stg_DEMA_Params : StgParams {
   StgParams sparams;
 
   // Struct constructors.
-  Stg_DEMA_Params(DEMAParams &_iparams, StgParams &_sparams)
-      : iparams(indi_dema_defaults, _iparams.tf.GetTf()), sparams(stg_dema_defaults) {
-    iparams = _iparams;
+  Stg_DEMA_Params(DEMAParams &_iparams, StgParams &_sparams) : iparams(_iparams, _iparams.tf.GetTf()) {
     sparams = _sparams;
   }
 };
@@ -88,7 +86,9 @@ class Stg_DEMA : public Strategy {
 
   static Stg_DEMA *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
+    Indi_DEMA_Params_Defaults indi_dema_defaults;
     DEMAParams _indi_params(indi_dema_defaults, _tf);
+    Stg_DEMA_Params_Defaults stg_dema_defaults;
     StgParams _stg_params(stg_dema_defaults);
 #ifdef __config__
     SetParamsByTf<DEMAParams>(_indi_params, _tf, indi_dema_m1, indi_dema_m5, indi_dema_m15, indi_dema_m30, indi_dema_h1,
